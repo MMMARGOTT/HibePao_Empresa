@@ -10,5 +10,5 @@ package modelo;
  * @author Niio
  */
 public enum TipoContrato {
-    
+    INDEFINIDO, TEMPORAL, PRACTICAS
 }

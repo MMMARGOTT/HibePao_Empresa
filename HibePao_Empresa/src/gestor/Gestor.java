@@ -28,7 +28,7 @@ public class Gestor {
     private String password;
     private Connection conn;
 
-    private final static String driver = "com.mysql.jdbc.Driver";
+    private final static String driver = "com.mysql.cj.jdbc.Driver";
     private ArrayList<Empleado> listaEmpleados;
 
     public Gestor(String user, String db, String conexion, String password) {
@@ -67,7 +67,7 @@ public class Gestor {
 
     public void registrarEmpleado(int id, String nombre, String apellido, String puesto, Float salario, TipoContrato tipo, int idJefe) throws SQLException {
         {
-            PreparedStatement st = null;// Sentencia SQL con placeholders
+            PreparedStatement st = null;
             String sql = "INSERT INTO empleados  (id, nombre,apellido, puesto, salario, tipo, jefe_id) VALUES (?, ?, ?, ?, ?, ?,?)";
 
             PreparedStatement preparedStatement = conn.prepareStatement(sql);
@@ -81,7 +81,6 @@ public class Gestor {
             preparedStatement.setString(6, tipo.toString());
             preparedStatement.setInt(7, idJefe); // id
 
-            // Ejecutar la sentencia
             int rowsInserted = preparedStatement.executeUpdate();
 
             if (rowsInserted > 0) {
@@ -92,7 +91,7 @@ public class Gestor {
         }
     }
 
-    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) {
+    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) throws MyException {
         ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
         try {
@@ -124,9 +123,9 @@ public class Gestor {
 
             int rowsUpdated = preparedStatement.executeUpdate();
             if (rowsUpdated > 0) {
-                JOptionPane.showMessageDialog(null, "Salario actualizado correctamente.");
+                JOptionPane.showMessageDialog(null, "Salario actualizado con éxito");
             } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el empleado con ID: " + idEmpleado);
+                JOptionPane.showMessageDialog(null, "No se ha encontrado al empleado");
             }
         }
     }
@@ -138,9 +137,9 @@ public class Gestor {
 
             int rowsDeleted = preparedStatement.executeUpdate();
             if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(null, "Empleado eliminado correctamente.");
+                JOptionPane.showMessageDialog(null, "Empleado eliminado con éxito");
             } else {
-                JOptionPane.showMessageDialog(null, "No se encontró el empleado con ID: " + idEmpleado);
+                JOptionPane.showMessageDialog(null, "No se ha encontrado a ese empleado con ese id");
             }
         }
     }

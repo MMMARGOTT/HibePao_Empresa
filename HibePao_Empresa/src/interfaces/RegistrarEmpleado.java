@@ -136,7 +136,8 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-            try {
+          
+        /*try {
             // TODO add your handling code here:
             String nombre = jTextFieldNombre.getText();
             String apellido = jTextFieldApellido.getText();
@@ -153,6 +154,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex.getSQLState());
         }
+        */
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**

@@ -7,6 +7,7 @@ package hibepao_empresa;
 
 import excepciones.MyException;
 import gestor.Gestor;
+import interfaces.MenuPrincipal;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,25 +21,18 @@ public class HibePao_Empresa {
      */
     public static void main(String[] args) throws MyException {
         // TODO code application logic here
-     
-            // TODO code application logic here
-            
+        try {
+
             Gestor miConexion = new Gestor("root", "hibePao_empresa", "jdbc:mysql://localhost:3306/", "");
             miConexion.initDataBase();
-            
-            
-           /*
-            LogIn logIn = new LogIn(miConexion);
-            logIn.setVisible(true);
-            logIn.setLocationRelativeTo(null);
-            
-        } catch (DatabaseException ex) {
+
+            MenuPrincipal mp = new MenuPrincipal(miConexion);
+            mp.setVisible(true);
+            mp.setLocationRelativeTo(null);
+
+        } catch (MyException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
-    */
-   }
-        }
-    
-    
 
+}
