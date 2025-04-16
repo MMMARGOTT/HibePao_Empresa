@@ -29,10 +29,6 @@ public class HibePao_Empresa {
             MenuPrincipal mp = new MenuPrincipal(miConexion);
             mp.setVisible(true);
             mp.setLocationRelativeTo(null);
-            
-            System.out.println("testing");
-            System.out.println("testing2");
-            
 
         } catch (MyException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
