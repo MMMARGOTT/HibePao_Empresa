@@ -5,11 +5,13 @@
  */
 package interfaces;
 
+import gestor.Gestor;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
+import modelo.TipoContrato;
 
 /**
  *
@@ -17,10 +19,12 @@ import javax.swing.JOptionPane;
  */
 public class RegistrarEmpleado extends javax.swing.JFrame {
 
+    Gestor miConexion;
+
     /**
      * Creates new form RegistrarEmpleado
      */
-    public RegistrarEmpleado() {
+    public RegistrarEmpleado(Gestor gestor) {
         initComponents();
     }
 
@@ -44,6 +48,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         jTextFieldSalario = new javax.swing.JTextField();
         jComboBox1 = new javax.swing.JComboBox<>();
         btnRegistrar = new javax.swing.JButton();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -72,6 +77,8 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
+        btnVolver.setText("Volver");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,8 +102,10 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                                 .addComponent(jTextFieldSalario, javax.swing.GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(196, 196, 196)
-                        .addComponent(btnRegistrar)))
+                        .addGap(211, 211, 211)
+                        .addComponent(btnRegistrar)
+                        .addGap(56, 56, 56)
+                        .addComponent(btnVolver)))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -122,9 +131,11 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
-                .addComponent(btnRegistrar)
-                .addGap(39, 39, 39))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrar)
+                    .addComponent(btnVolver))
+                .addGap(38, 38, 38))
         );
 
         pack();
@@ -136,25 +147,28 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-          
-        /*try {
-            // TODO add your handling code here:
-            String nombre = jTextFieldNombre.getText();
-            String apellido = jTextFieldApellido.getText();
-            String puesto =  jTextFieldPuesto.getText();
-            String salario = jTextFieldSalario.getText();
-            String tipoContrato = jComboBox1.getSelectedItem().toString();
-        
-            
-            if(!nombre.isEmpty() || !ubicacion.isEmpty() || !fecha.isEmpty() || !detalles.isEmpty()){
-                gestor.crearRave(usuario.getIdUsuario(), nombre, ubicacion, fechaFormateada, detalles);
+
+        String nombre = jTextFieldNombre.getText();
+        String apellido = jTextFieldApellido.getText();
+        String puesto = jTextFieldPuesto.getText();
+        String salario = jTextFieldSalario.getText();
+        String tipoContrato = jComboBox1.getSelectedItem().toString();
+
+        Float salarioFloat = Float.parseFloat(salario);
+
+        if (tipoContrato.equals("INDEFINIDO") || tipoContrato.equals("TEMPORAL") || tipoContrato.equals("PRACTICAS")) {
+            TipoContrato tipoEnum = TipoContrato.valueOf(tipoContrato);
+
+            if (!nombre.isEmpty() || apellido.isEmpty() || puesto.isEmpty() || salario.isEmpty() || tipoContrato.isEmpty()) {
+                miConexion.registrarEmpleado(nombre, apellido, puesto, salario, tipoEnum);
+                JOptionPane.showMessageDialog(null, "Pedido registrado con éxito");
+
             }
-        } catch (ParseException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage());
-        } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex.getSQLState());
+        } else {
+            JOptionPane.showMessageDialog(null, "El estado introducido es incorrecto");
         }
-        */
+
+
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     /**
@@ -187,13 +201,14 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new RegistrarEmpleado().setVisible(true);
+               // new RegistrarEmpleado().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
