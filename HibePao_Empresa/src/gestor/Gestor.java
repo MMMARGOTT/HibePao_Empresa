@@ -8,8 +8,11 @@ package gestor;
 import excepciones.MyException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import modelo.TipoContrato;
 
 /**
  *
@@ -57,5 +60,30 @@ public class Gestor {
             throw new  MyException(ex.getSQLState() + " no se ha podido cerrar la base de datos, posible perdida de informacion");
 
         }
+    }
+    public void registrarEmpleado(int id, String nombre, String apellido, String puesto,  Float salario, TipoContrato tipo, int idJefe)throws SQLException{
+      {
+        PreparedStatement st = null;// Sentencia SQL con placeholders
+        String sql = "INSERT INTO Raves (idUsuario, nombre, ubicacion, fecha, detalles) VALUES (?, ?, ?, ?, ?)";
+
+        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+
+        // Asignar valores a los placeholders
+        preparedStatement.setString(1, idUsuario); // id
+        preparedStatement.setString(2, nombre); // name
+        preparedStatement.setString(3, ubicacion); // ubicacion
+        preparedStatement.setDate(4, fecha); // fecha
+        preparedStatement.setString(5, detalles); // fecha
+        
+
+        // Ejecutar la sentencia
+        int rowsInserted = preparedStatement.executeUpdate();
+
+        if (rowsInserted > 0) {
+            JOptionPane.showMessageDialog(null, "El registro fue insertado exitosamente.");
+            System.out.println("El registro fue insertado exitosamente.");
+
+        }
+    }
     }
 }

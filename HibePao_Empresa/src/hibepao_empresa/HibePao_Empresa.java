@@ -23,7 +23,7 @@ public class HibePao_Empresa {
      
             // TODO code application logic here
             
-            Gestor miConexion = new Gestor("root", "raveapp", "jdbc:mysql://localhost:3306/", "");
+            Gestor miConexion = new Gestor("root", "hibePao_empresa", "jdbc:mysql://localhost:3306/", "");
             miConexion.initDataBase();
             
             
