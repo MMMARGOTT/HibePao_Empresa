@@ -45,6 +45,7 @@ public class Gestor {
             //cargar el driver
             Class.forName(driver);
             this.conn = DriverManager.getConnection(conexion + db, user, password);
+
         } catch (ClassNotFoundException ex) {
             //ex.printStackTrace();
             throw new MyException("No has puesto la librería MySql");
@@ -65,53 +66,58 @@ public class Gestor {
         }
     }
 
-    public void registrarEmpleado(int id, String nombre, String apellido, String puesto, Float salario, TipoContrato tipo, int idJefe) throws SQLException {
-        {
+    public void registrarEmpleado(String nombre, String apellido, String puesto, Float salario, TipoContrato tipo) {
+        try {
             PreparedStatement st = null;
-            String sql = "INSERT INTO empleados  (id, nombre,apellido, puesto, salario, tipo, jefe_id) VALUES (?, ?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO empleados(nombre, apellido, puesto, salario, tipo_contrato) VALUES (?, ?, ?, ?, ?)";
 
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            st = conn.prepareStatement(sql);
+            st.setString(1, nombre);
+            st.setString(2, apellido);
+            st.setString(3, puesto);
+            st.setFloat(4, salario);
+            st.setString(5, tipo.toString());
 
-            // Asignar valores a los placeholders
-            preparedStatement.setInt(1, id); // id
-            preparedStatement.setString(2, nombre); // name
-            preparedStatement.setString(3, apellido); // ubicacion
-            preparedStatement.setString(4, puesto); // fecha
-            preparedStatement.setFloat(5, salario); // fecha
-            preparedStatement.setString(6, tipo.toString());
-            preparedStatement.setInt(7, idJefe); // id
-
-            int rowsInserted = preparedStatement.executeUpdate();
+            int rowsInserted = st.executeUpdate();
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(null, "El registro fue insertado exitosamente.");
                 System.out.println("El registro fue insertado exitosamente.");
 
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         }
     }
 
-    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) throws MyException {
+    public ArrayList<Empleado> ConsultarEmpleado(String puesto) throws MyException {
         ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM empleado WHERE puesto && jefe_id";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, puesto);
-            preparedStatement.setInt(2, idJefe);
+            String sql = "SELECT * FROM empleados WHERE puesto = ?";
+            PreparedStatement sentencia = conn.prepareStatement(sql);
+            sentencia.setString(1, puesto);
+            ResultSet resultado = sentencia.executeQuery();
 
-            try (ResultSet rs = (ResultSet) preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    Empleado e = new Empleado(rs.getInt("id"),
-                            rs.getString("nombre"), rs.getString("apellido"),
-                            rs.getString("puesto"), rs.getFloat("salario"),
-                            rs.getString("tipo"), rs.getInt("idJefe"));
-                    listaEmpleados.add(e);
-                }
+            while (resultado.next()) {
+                int id = resultado.getInt("id");
+                String nombre = resultado.getString("nombre");
+                String apellido = resultado.getString("apellido");
+                Float salario = resultado.getFloat("salario");
+                String tipoContrato = resultado.getString("tipo_contrato");
+                int idJefe = resultado.getInt("jefe_id");
+                
+                TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
+
+                Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, idJefe);
+
+                listaEmpleados.add(e);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getSQLState(), "Error", JOptionPane.ERROR_MESSAGE);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return listaEmpleados;
     }
 
