@@ -90,27 +90,34 @@ public class Gestor {
         }
     }
 
-    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) throws MyException {
+    public ArrayList<Empleado> ConsultarEmpleado(String puesto) throws MyException {
         ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM empleado WHERE puesto && jefe_id";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, puesto);
-            preparedStatement.setInt(2, idJefe);
+            String sql = "SELECT * FROM empleados WHERE puesto = ?";
+            PreparedStatement sentencia = conn.prepareStatement(sql);
+            sentencia.setString(1, puesto);
+            ResultSet resultado = sentencia.executeQuery();
 
-            try (ResultSet rs = (ResultSet) preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    Empleado e = new Empleado(rs.getInt("id"),
-                            rs.getString("nombre"), rs.getString("apellido"),
-                            rs.getString("puesto"), rs.getFloat("salario"),
-                            rs.getString("tipo"), rs.getInt("idJefe"));
-                    listaEmpleados.add(e);
-                }
+            while (resultado.next()) {
+                int id = resultado.getInt("id");
+                String nombre = resultado.getString("nombre");
+                String apellido = resultado.getString("apellido");
+                Float salario = resultado.getFloat("salario");
+                String tipoContrato = resultado.getString("tipo_contrato");
+                int idJefe = resultado.getInt("jefe_id");
+                
+                TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
+
+                Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, idJefe);
+
+                listaEmpleados.add(e);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex.getSQLState(), "Error", JOptionPane.ERROR_MESSAGE);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
         return listaEmpleados;
     }
 
