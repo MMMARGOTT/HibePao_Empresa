@@ -42,6 +42,17 @@ public class Empleado {
         this.idJefe = idJefe;
         
     }
+
+    public Empleado(String nombre, String apellido, String puesto, float salario, TipoContrato tipo, int idJefe) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.puesto = puesto;
+        this.salario = salario;
+        this.tipo = tipo;
+        this.idJefe = idJefe;
+    }
+    
+    
     
     public int getId() {
         return id;

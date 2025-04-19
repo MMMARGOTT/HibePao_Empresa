@@ -25,6 +25,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
      * Creates new form RegistrarEmpleado
      */
     public RegistrarEmpleado(Gestor gestor) {
+        this.miConexion = gestor;
         initComponents();
     }
 
@@ -68,7 +69,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Indefinido", "Temporal", "Practicas" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDEFINIDO", "TEMPORAL", "PRACTICAS " }));
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -78,6 +79,11 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         });
 
         btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -119,11 +125,11 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextFieldPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jTextFieldSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -147,7 +153,8 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
-
+        System.out.println("Conexion en registrar empleado: " + miConexion);
+        
         String nombre = jTextFieldNombre.getText();
         String apellido = jTextFieldApellido.getText();
         String puesto = jTextFieldPuesto.getText();
@@ -157,19 +164,28 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         Float salarioFloat = Float.parseFloat(salario);
 
         if (tipoContrato.equals("INDEFINIDO") || tipoContrato.equals("TEMPORAL") || tipoContrato.equals("PRACTICAS")) {
-            TipoContrato tipoEnum = TipoContrato.valueOf(tipoContrato);
 
-            if (!nombre.isEmpty() || apellido.isEmpty() || puesto.isEmpty() || salario.isEmpty() || tipoContrato.isEmpty()) {
-                miConexion.registrarEmpleado(nombre, apellido, puesto, salario, tipoEnum);
-                JOptionPane.showMessageDialog(null, "Pedido registrado con éxito");
+            TipoContrato tipoEnum = TipoContrato.valueOf(tipoContrato);
+            System.out.println("pasa la sentencia");
+
+            if (!nombre.isEmpty() || !apellido.isEmpty() || !puesto.isEmpty() || !salario.isEmpty() || !tipoContrato.isEmpty()) {
+                System.out.println("Entra");
+                miConexion.registrarEmpleado(nombre, apellido, puesto, salarioFloat, tipoEnum);
+
+                System.out.println("Estás funcionando?");
 
             }
+            
         } else {
-            JOptionPane.showMessageDialog(null, "El estado introducido es incorrecto");
+            JOptionPane.showMessageDialog(null, "El tipo de contrato introducido es incorrecto");
         }
 
 
     }//GEN-LAST:event_btnRegistrarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,7 +217,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-               // new RegistrarEmpleado().setVisible(true);
+                // new RegistrarEmpleado().setVisible(true);
             }
         });
     }

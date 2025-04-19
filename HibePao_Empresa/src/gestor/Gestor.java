@@ -45,6 +45,7 @@ public class Gestor {
             //cargar el driver
             Class.forName(driver);
             this.conn = DriverManager.getConnection(conexion + db, user, password);
+            
         } catch (ClassNotFoundException ex) {
             //ex.printStackTrace();
             throw new MyException("No has puesto la librería MySql");
@@ -65,29 +66,27 @@ public class Gestor {
         }
     }
 
-    public void registrarEmpleado(int id, String nombre, String apellido, String puesto, Float salario, TipoContrato tipo, int idJefe) throws SQLException {
-        {
+    public void registrarEmpleado(String nombre, String apellido, String puesto, Float salario, TipoContrato tipo){
+        try {
             PreparedStatement st = null;
-            String sql = "INSERT INTO empleados  (id, nombre,apellido, puesto, salario, tipo, jefe_id) VALUES (?, ?, ?, ?, ?, ?,?)";
+            String sql = "INSERT INTO empleados(nombre, apellido, puesto, salario, tipo_contrato) VALUES (?, ?, ?, ?, ?)";
 
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            st = conn.prepareStatement(sql);
+            st.setString(1, nombre); 
+            st.setString(2, apellido); 
+            st.setString(3, puesto); 
+            st.setFloat(4, salario); 
+            st.setString(5, tipo.toString());
 
-            // Asignar valores a los placeholders
-            preparedStatement.setInt(1, id); // id
-            preparedStatement.setString(2, nombre); // name
-            preparedStatement.setString(3, apellido); // ubicacion
-            preparedStatement.setString(4, puesto); // fecha
-            preparedStatement.setFloat(5, salario); // fecha
-            preparedStatement.setString(6, tipo.toString());
-            preparedStatement.setInt(7, idJefe); // id
-
-            int rowsInserted = preparedStatement.executeUpdate();
+            int rowsInserted = st.executeUpdate();
 
             if (rowsInserted > 0) {
                 JOptionPane.showMessageDialog(null, "El registro fue insertado exitosamente.");
                 System.out.println("El registro fue insertado exitosamente.");
 
             }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error: " + ex.getMessage());
         }
     }
 
@@ -143,5 +142,6 @@ public class Gestor {
             }
         }
     }
+
 
 }
