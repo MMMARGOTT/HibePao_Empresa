@@ -45,7 +45,7 @@ public class Gestor {
             //cargar el driver
             Class.forName(driver);
             this.conn = DriverManager.getConnection(conexion + db, user, password);
-            
+
         } catch (ClassNotFoundException ex) {
             //ex.printStackTrace();
             throw new MyException("No has puesto la librería MySql");
@@ -66,16 +66,16 @@ public class Gestor {
         }
     }
 
-    public void registrarEmpleado(String nombre, String apellido, String puesto, Float salario, TipoContrato tipo){
+    public void registrarEmpleado(String nombre, String apellido, String puesto, Float salario, TipoContrato tipo) {
         try {
             PreparedStatement st = null;
             String sql = "INSERT INTO empleados(nombre, apellido, puesto, salario, tipo_contrato) VALUES (?, ?, ?, ?, ?)";
 
             st = conn.prepareStatement(sql);
-            st.setString(1, nombre); 
-            st.setString(2, apellido); 
-            st.setString(3, puesto); 
-            st.setFloat(4, salario); 
+            st.setString(1, nombre);
+            st.setString(2, apellido);
+            st.setString(3, puesto);
+            st.setFloat(4, salario);
             st.setString(5, tipo.toString());
 
             int rowsInserted = st.executeUpdate();
@@ -142,6 +142,5 @@ public class Gestor {
             }
         }
     }
-
 
 }

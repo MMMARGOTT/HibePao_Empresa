@@ -154,7 +154,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
         // TODO add your handling code here:
         System.out.println("Conexion en registrar empleado: " + miConexion);
-        
+
         String nombre = jTextFieldNombre.getText();
         String apellido = jTextFieldApellido.getText();
         String puesto = jTextFieldPuesto.getText();
@@ -166,16 +166,13 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
         if (tipoContrato.equals("INDEFINIDO") || tipoContrato.equals("TEMPORAL") || tipoContrato.equals("PRACTICAS")) {
 
             TipoContrato tipoEnum = TipoContrato.valueOf(tipoContrato);
-            System.out.println("pasa la sentencia");
 
             if (!nombre.isEmpty() || !apellido.isEmpty() || !puesto.isEmpty() || !salario.isEmpty() || !tipoContrato.isEmpty()) {
                 System.out.println("Entra");
                 miConexion.registrarEmpleado(nombre, apellido, puesto, salarioFloat, tipoEnum);
 
-                System.out.println("Estás funcionando?");
-
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "El tipo de contrato introducido es incorrecto");
         }
@@ -185,6 +182,11 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
+        MenuPrincipal mp = new MenuPrincipal(miConexion);
+        mp.setVisible(true);
+        mp.setLocationRelativeTo(null); //Para poner la ventana en el centro
+
+        this.dispose(); //Cierra la ventana, sin cerrar la app
     }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
