@@ -31,26 +31,31 @@ public class AsignarJefe extends javax.swing.JFrame {
         cargarComboBoxJefes();
     }
 
-    public void cargarComboBoxJefes() {
+    public DefaultComboBoxModel<String> cargarComboBoxJefes() {
         try {
-            String sql = "SELECT id, nombre FROM empleados";
+            String sql = "SELECT nombre, apellido FROM empleados WHERE puesto LIKE 'Jefe%'";
             PreparedStatement sentencia = miConexion.getConnection().prepareStatement(sql);
             ResultSet rs = sentencia.executeQuery();
 
-            DefaultComboBoxModel<Jefe> modelo = new DefaultComboBoxModel<>();
+            DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
             //jComboBoxJefe.setModel(modelo);
 
             while (rs.next()) {
-                int id = rs.getInt("id");
+                //int id = rs.getInt("id");
                 String nombre = rs.getString("nombre");
-
-                modelo.addElement(new Jefe(id, nombre));
+                String apellido = rs.getString("apellido");
+                String nombreCompleto = nombre + " " + apellido;
+                
+                modelo.addElement(nombreCompleto);
             }
+            
+            return modelo;
 
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error al cargar jefes: " + e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -81,7 +86,7 @@ public class AsignarJefe extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxJefe.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Begonia", "Florencio", "Asuncion", "Jose" }));
+        jComboBoxJefe.setModel(cargarComboBoxJefes());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,14 +98,12 @@ public class AsignarJefe extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextFieldIdEmpleado)
-                    .addComponent(jComboBoxJefe, 0, 137, Short.MAX_VALUE))
-                .addContainerGap(44, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnAsignar)
-                .addGap(160, 160, 160))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAsignar)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jComboBoxJefe, 0, 190, Short.MAX_VALUE)
+                        .addComponent(jTextFieldIdEmpleado)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,9 +116,9 @@ public class AsignarJefe extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jComboBoxJefe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addGap(59, 59, 59)
                 .addComponent(btnAsignar)
-                .addGap(58, 58, 58))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         pack();
@@ -125,12 +128,11 @@ public class AsignarJefe extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             String idEmpleado = jTextFieldIdEmpleado.getText();
-            String idJefe = jComboBoxJefe.getSelectedItem().toString();
+            int idJefe = (int)jComboBoxJefe.getSelectedItem();
 
             int idEmpleadoInt = Integer.parseInt(idEmpleado);
-            int idJefeInt = Integer.parseInt(idJefe);
 
-            miConexion.asignarJefe(idEmpleadoInt, idJefeInt);
+            miConexion.asignarJefe(idEmpleadoInt, idJefe);
         } catch (SQLException ex) {
 
         }

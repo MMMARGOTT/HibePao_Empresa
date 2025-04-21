@@ -18,6 +18,11 @@ public class Jefe {
         this.nombre = nombre;
     }
 
+    public Jefe(int id) {
+        this.id = id;
+    }
+    
+
     public int getId() {
         return id;
     }
