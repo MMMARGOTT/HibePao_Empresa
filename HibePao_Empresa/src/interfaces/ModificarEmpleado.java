@@ -123,6 +123,10 @@ public class ModificarEmpleado extends javax.swing.JFrame {
             float nuevoSalarioFloat = Float.parseFloat(nuevoSalario);
 
             miConexion.modificarSalario(idEmpleadoInt, nuevoSalarioFloat);
+
+            miConexion.volverMenu(miConexion);
+
+            this.dispose(); //Cierra la ventana, sin cerrar la app
         } catch (SQLException ex) {
 
         }

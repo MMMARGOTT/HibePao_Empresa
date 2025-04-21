@@ -6,6 +6,7 @@
 package gestor;
 
 import excepciones.MyException;
+import interfaces.MenuPrincipal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -39,7 +40,7 @@ public class Gestor {
         this.password = password;
         this.conn = null;
     }
-    
+
     public Connection getConnection() {
         return conn;
     }
@@ -114,7 +115,6 @@ public class Gestor {
                 int jefeId = resultado.getInt("jefe_id");
 
                 //TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
-
                 Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, jefeId);
 
                 listaEmpleados.add(e);
@@ -169,6 +169,13 @@ public class Gestor {
                 JOptionPane.showMessageDialog(null, "Empleado no encontrado");
             }
         }
+
+    }
+
+    public void volverMenu(Gestor gestor) {
+        MenuPrincipal mp = new MenuPrincipal(gestor);
+        mp.setVisible(true);
+        mp.setLocationRelativeTo(null); //Para poner la ventana en el centr
 
     }
 }

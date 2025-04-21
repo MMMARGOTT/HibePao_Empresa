@@ -45,10 +45,10 @@ public class AsignarJefe extends javax.swing.JFrame {
                 String nombre = rs.getString("nombre");
                 String apellido = rs.getString("apellido");
                 String nombreCompleto = nombre + " " + apellido;
-                
+
                 modelo.addElement(nombreCompleto);
             }
-            
+
             return modelo;
 
         } catch (SQLException e) {
@@ -128,13 +128,17 @@ public class AsignarJefe extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
             String idEmpleado = jTextFieldIdEmpleado.getText();
-            int idJefe = (int)jComboBoxJefe.getSelectedItem();
+            int idJefe = (int) jComboBoxJefe.getSelectedItem();
 
             int idEmpleadoInt = Integer.parseInt(idEmpleado);
 
             miConexion.asignarJefe(idEmpleadoInt, idJefe);
-        } catch (SQLException ex) {
 
+            miConexion.volverMenu(miConexion);
+
+            this.dispose(); //Cierra la ventana, sin cerrar la app
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al asignar el jefe");
         }
 
     }//GEN-LAST:event_btnAsignarActionPerformed

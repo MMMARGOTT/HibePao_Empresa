@@ -113,6 +113,9 @@ public class EliminarEmpleado extends javax.swing.JFrame {
             }
             int idEmpleadoInt = Integer.parseInt(idEmpleado);
             miConexion.borrarEmpleado(idEmpleadoInt);
+
+            miConexion.volverMenu(miConexion);
+            this.dispose(); //Cierra la ventana, sin cerrar la app
         } catch (SQLException ex) {
 
         }
@@ -120,9 +123,8 @@ public class EliminarEmpleado extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
-        MenuPrincipal mp = new MenuPrincipal(miConexion);
-        mp.setVisible(true);
-        mp.setLocationRelativeTo(null); //Para poner la ventana en el centro
+
+        miConexion.volverMenu(miConexion);
 
         this.dispose(); //Cierra la ventana, sin cerrar la app
     }//GEN-LAST:event_btnVolverActionPerformed
