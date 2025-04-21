@@ -4,17 +4,58 @@
  */
 package interfaces;
 
+import gestor.Gestor;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import modelo.Jefe;
+
 /**
  *
  * @author paolaschicote
  */
 public class AsignarJefe extends javax.swing.JFrame {
 
+    Gestor miConexion;
+
     /**
      * Creates new form AsignarJefe
      */
-    public AsignarJefe() {
+    public AsignarJefe(Gestor gestor) {
+        this.miConexion = gestor;
         initComponents();
+        cargarComboBoxJefes();
+    }
+
+    public DefaultComboBoxModel<String> cargarComboBoxJefes() {
+        try {
+            String sql = "SELECT nombre, apellido FROM empleados WHERE puesto LIKE 'Jefe%'";
+            PreparedStatement sentencia = miConexion.getConnection().prepareStatement(sql);
+            ResultSet rs = sentencia.executeQuery();
+
+            DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<>();
+            //jComboBoxJefe.setModel(modelo);
+
+            while (rs.next()) {
+                //int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String nombreCompleto = nombre + " " + apellido;
+
+                modelo.addElement(nombreCompleto);
+            }
+
+            return modelo;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al cargar jefes: " + e.getMessage());
+        }
+        return null;
     }
 
     /**
@@ -26,21 +67,81 @@ public class AsignarJefe extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldIdEmpleado = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        btnAsignar = new javax.swing.JButton();
+        jComboBoxJefe = new javax.swing.JComboBox<>();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jLabel1.setText("Id del empleado:");
+
+        jLabel2.setText("Nombre del jefe:");
+
+        btnAsignar.setText("Asignar");
+        btnAsignar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAsignarActionPerformed(evt);
+            }
+        });
+
+        jComboBoxJefe.setModel(cargarComboBoxJefes());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(65, 65, 65)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addGap(55, 55, 55)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAsignar)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jComboBoxJefe, 0, 190, Short.MAX_VALUE)
+                        .addComponent(jTextFieldIdEmpleado)))
+                .addContainerGap(54, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(67, 67, 67)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextFieldIdEmpleado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jComboBoxJefe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59)
+                .addComponent(btnAsignar)
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAsignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAsignarActionPerformed
+        try {
+            // TODO add your handling code here:
+            String idEmpleado = jTextFieldIdEmpleado.getText();
+            int idJefe = (int) jComboBoxJefe.getSelectedItem();
+
+            int idEmpleadoInt = Integer.parseInt(idEmpleado);
+
+            miConexion.asignarJefe(idEmpleadoInt, idJefe);
+
+            miConexion.volverMenu(miConexion);
+
+            this.dispose(); //Cierra la ventana, sin cerrar la app
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al asignar el jefe");
+        }
+
+    }//GEN-LAST:event_btnAsignarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -72,11 +173,16 @@ public class AsignarJefe extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AsignarJefe().setVisible(true);
+                //new AsignarJefe().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAsignar;
+    private javax.swing.JComboBox<String> jComboBoxJefe;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextFieldIdEmpleado;
     // End of variables declaration//GEN-END:variables
 }

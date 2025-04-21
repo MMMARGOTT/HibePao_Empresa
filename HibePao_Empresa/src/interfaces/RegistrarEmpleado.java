@@ -70,7 +70,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDEFINIDO", "TEMPORAL", "PRACTICAS " }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDEFINIDO", "TEMPORAL", "PRACTICAS" }));
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {
@@ -187,6 +187,10 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
                 miConexion.registrarEmpleado(nombre, apellido, puesto, salarioFloat, tipoEnum);
 
+                miConexion.volverMenu(miConexion);
+
+                this.dispose(); //Cierra la ventana, sin cerrar la app
+
             }
 
         } else {
@@ -198,10 +202,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
         // TODO add your handling code here:
-        MenuPrincipal mp = new MenuPrincipal(miConexion);
-        mp.setVisible(true);
-        mp.setLocationRelativeTo(null); //Para poner la ventana en el centro
-
+        miConexion.volverMenu(miConexion);
         this.dispose(); //Cierra la ventana, sin cerrar la app
     }//GEN-LAST:event_btnVolverActionPerformed
 

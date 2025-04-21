@@ -5,12 +5,16 @@
 package interfaces;
 
 import gestor.Gestor;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author paolaschicote
  */
 public class ModificarEmpleado extends javax.swing.JFrame {
+
     Gestor miConexion;
 
     /**
@@ -31,31 +35,111 @@ public class ModificarEmpleado extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTextFieldSalario = new javax.swing.JTextField();
+        btnModificar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldNuevoSalario = new javax.swing.JTextField();
+        btnVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 14)); // NOI18N
-        jLabel1.setText("Modificar empleado");
+        jLabel1.setText("Modificar salario");
+
+        jLabel2.setText("Di el id del empleado:");
+
+        btnModificar.setText("Modificar");
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Introduce un nuevo salario:");
+
+        btnVolver.setText("Volver");
+        btnVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVolverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(134, 134, 134)
-                .addComponent(jLabel1)
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(134, 134, 134)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(44, 44, 44)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(40, 40, 40)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldSalario)
+                            .addComponent(jTextFieldNuevoSalario, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(75, 75, 75)
+                        .addComponent(btnModificar)
+                        .addGap(64, 64, 64)
+                        .addComponent(btnVolver)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(jLabel1)
-                .addContainerGap(246, Short.MAX_VALUE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextFieldSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextFieldNuevoSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnModificar)
+                    .addComponent(btnVolver))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        try {
+            // TODO add your handling code here:
+            String idEmpleado = jTextFieldSalario.getText();
+            String nuevoSalario = jTextFieldNuevoSalario.getText();
+
+            int idEmpleadoInt = Integer.parseInt(idEmpleado);
+            float nuevoSalarioFloat = Float.parseFloat(nuevoSalario);
+
+            miConexion.modificarSalario(idEmpleadoInt, nuevoSalarioFloat);
+
+            miConexion.volverMenu(miConexion);
+
+            this.dispose(); //Cierra la ventana, sin cerrar la app
+        } catch (SQLException ex) {
+
+        }
+    }//GEN-LAST:event_btnModificarActionPerformed
+
+    private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
+        // TODO add your handling code here:
+        MenuPrincipal mp = new MenuPrincipal(miConexion);
+        mp.setVisible(true);
+        mp.setLocationRelativeTo(null); //Para poner la ventana en el centro
+
+        this.dispose(); //Cierra la ventana, sin cerrar la app
+    }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
      * @param args the command line arguments
@@ -93,6 +177,12 @@ public class ModificarEmpleado extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnModificar;
+    private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JTextField jTextFieldNuevoSalario;
+    private javax.swing.JTextField jTextFieldSalario;
     // End of variables declaration//GEN-END:variables
 }
