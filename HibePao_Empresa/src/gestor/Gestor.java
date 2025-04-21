@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import modelo.Empleado;
+import modelo.Jefe;
 import modelo.TipoContrato;
 
 /**
@@ -37,6 +38,10 @@ public class Gestor {
         this.conexion = conexion;
         this.password = password;
         this.conn = null;
+    }
+    
+    public Connection getConnection() {
+        return conn;
     }
 
     //Métodos para inicializar y cerrar la base de datos
@@ -90,13 +95,14 @@ public class Gestor {
         }
     }
 
-    public ArrayList<Empleado> ConsultarEmpleado(String puesto) throws MyException {
+    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) throws MyException {
         ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM empleados WHERE puesto = ?";
+            String sql = "SELECT * FROM empleados WHERE puesto = ? AND jefe_id = ?";
             PreparedStatement sentencia = conn.prepareStatement(sql);
             sentencia.setString(1, puesto);
+            sentencia.setInt(2, idJefe);
             ResultSet resultado = sentencia.executeQuery();
 
             while (resultado.next()) {
@@ -105,11 +111,11 @@ public class Gestor {
                 String apellido = resultado.getString("apellido");
                 Float salario = resultado.getFloat("salario");
                 String tipoContrato = resultado.getString("tipo_contrato");
-                int idJefe = resultado.getInt("jefe_id");
-                
+                int jefeId = resultado.getInt("jefe_id");
+
                 TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
 
-                Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, idJefe);
+                Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, jefeId);
 
                 listaEmpleados.add(e);
             }
@@ -150,4 +156,19 @@ public class Gestor {
         }
     }
 
+    public void asignarJefe(int idEmpleado, int idJefe) throws SQLException {
+        String sql = "UPDATE empleados SET jefe_id = ? WHERE id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idJefe);
+            ps.setInt(2, idEmpleado);
+
+            int rowsAsignadas = ps.executeUpdate();
+            if (rowsAsignadas > 0) {
+                JOptionPane.showMessageDialog(null, "Jefe asignado con éxito");
+            } else {
+                JOptionPane.showMessageDialog(null, "Empleado no encontrado");
+            }
+        }
+
+    }
 }

@@ -70,7 +70,7 @@ public class RegistrarEmpleado extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDEFINIDO", "TEMPORAL", "PRACTICAS " }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INDEFINIDO", "TEMPORAL", "PRACTICAS" }));
 
         btnRegistrar.setText("Registrar");
         btnRegistrar.addActionListener(new java.awt.event.ActionListener() {

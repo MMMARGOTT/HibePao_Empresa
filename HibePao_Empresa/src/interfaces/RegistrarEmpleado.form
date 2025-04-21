@@ -155,7 +155,7 @@
           <StringArray count="3">
             <StringItem index="0" value="INDEFINIDO"/>
             <StringItem index="1" value="TEMPORAL"/>
-            <StringItem index="2" value="PRACTICAS "/>
+            <StringItem index="2" value="PRACTICAS"/>
           </StringArray>
         </Property>
       </Properties>

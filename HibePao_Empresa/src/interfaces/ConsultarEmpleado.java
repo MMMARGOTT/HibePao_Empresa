@@ -31,28 +31,18 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
         initComponents();
     }
 
-    public void consultarEmpleado(String puesto) {
+    public void consultarEmpleado(String puesto, int idJefe) {
 
         try {
-            modelo.addColumn("id ");
-            modelo.addColumn("Nombre");
-            modelo.addColumn("Apellido");
-            modelo.addColumn("puesto");
-            modelo.addColumn("Salario");
-            modelo.addColumn("Tipo de contrato");
-            
+            modelo.addColumn("Puesto ");
+            modelo.addColumn("Jefe");
 
-            ArrayList<Empleado> listaEmpleados = miConexion.ConsultarEmpleado(puesto);
+            ArrayList<Empleado> listaEmpleados = miConexion.ConsultarEmpleado(puesto, idJefe);
 
             for (Empleado e : listaEmpleados) {
-                Object[] columna = new Object[6];
-                columna[0] = e.getId();
-                columna[1] = e.getNombre();
-                columna[2] = e.getApellido();
-                columna[3] = e.getPuesto();
-                columna[4] = e.getSalario();
-                columna[5] = e.getTipo();
-                
+                Object[] columna = new Object[2];
+                columna[0] = e.getPuesto();
+                columna[1] = e.getIdJefe();
 
                 modelo.addRow(columna);
 
@@ -78,6 +68,8 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         btnConsultar = new javax.swing.JButton();
         btnVolver = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jTextFieldJefe = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -86,8 +78,7 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
 
         jLabel2.setText("Di el puesto del empleado:");
 
-        jTable1.setModel(modelo
-        );
+        jTable1.setModel(modelo);
         jScrollPane1.setViewportView(jTable1);
 
         btnConsultar.setText("Conusltar");
@@ -104,17 +95,14 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("Di el id del jefe: ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(jTextFieldPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(171, 171, 171)
                         .addComponent(btnConsultar)
@@ -124,9 +112,18 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
                         .addGap(195, 195, 195)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(49, Short.MAX_VALUE))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addGap(35, 35, 35)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextFieldPuesto)
+                                    .addComponent(jTextFieldJefe, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE))))))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,13 +134,17 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jTextFieldPuesto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jTextFieldJefe, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnVolver)
                     .addComponent(btnConsultar))
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         pack();
@@ -152,11 +153,18 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
     private void btnConsultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarActionPerformed
         // TODO add your handling code here:
         String puesto = jTextFieldPuesto.getText();
+        String idJefe = jTextFieldJefe.getText();
 
-        if (puesto.isEmpty()) {
+        if (puesto.isEmpty() || idJefe.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Ingresa el puesto del empleado y el id del jefe");
         } else {
-            consultarEmpleado(puesto);
+            try {
+                int idJefeInt = Integer.parseInt(idJefe);
+                miConexion.ConsultarEmpleado(puesto, idJefeInt);
+            } catch (MyException ex) {
+                 JOptionPane.showMessageDialog(this, "El id del jefe tiene que ser válido");
+               
+            }
         }
     }//GEN-LAST:event_btnConsultarActionPerformed
 
@@ -167,7 +175,7 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
         mp.setLocationRelativeTo(null); //Para poner la ventana en el centro
 
         this.dispose(); //Cierra la ventana, sin cerrar la app
-        
+
     }//GEN-LAST:event_btnVolverActionPerformed
 
     /**
@@ -210,8 +218,10 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
     private javax.swing.JButton btnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextFieldJefe;
     private javax.swing.JTextField jTextFieldPuesto;
     // End of variables declaration//GEN-END:variables
 }

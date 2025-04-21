@@ -109,7 +109,6 @@ public class EliminarEmpleado extends javax.swing.JFrame {
             // TODO add your handling code here:
             String idEmpleado = jTextFieldId.getText();
             if (idEmpleado.isEmpty()) {
-
                 return;
             }
             int idEmpleadoInt = Integer.parseInt(idEmpleado);
