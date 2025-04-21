@@ -28,26 +28,40 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
     public ConsultarEmpleado(Gestor gestor) {
         this.miConexion = gestor;
         this.modelo = new DefaultTableModel();
+        establecerFormatoTabla();
         initComponents();
     }
 
-    public void consultarEmpleado(String puesto, int idJefe) {
+    public void establecerFormatoTabla() {
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Apellido");
+        modelo.addColumn("Puesto");
+        modelo.addColumn("Salario");
+        modelo.addColumn("Tipo de contrato");
+        modelo.addColumn("Jefe");
+    }
 
-        try {
-            modelo.addColumn("Puesto ");
-            modelo.addColumn("Jefe");
+    public void limpiarTabla() {
+        int numeroFilas = modelo.getRowCount();
 
-            ArrayList<Empleado> listaEmpleados = miConexion.ConsultarEmpleado(puesto, idJefe);
+        for (int i = numeroFilas - 1; i >= 0; i--) {
+            modelo.removeRow(i);
+        }
+    }
 
-            for (Empleado e : listaEmpleados) {
-                Object[] columna = new Object[2];
-                columna[0] = e.getPuesto();
-                columna[1] = e.getIdJefe();
+    public void rellenarTabla(ArrayList<Empleado> listaEmpleados) {
+        limpiarTabla();
+        for (Empleado e : listaEmpleados) {
+            Object[] columna = new Object[6];
 
-                modelo.addRow(columna);
+            columna[0] = e.getNombre();
+            columna[1] = e.getApellido();
+            columna[2] = e.getPuesto();
+            columna[3] = e.getSalario();
+            columna[4] = e.getTipo();
+            columna[5] = e.getIdJefe();
 
-            }
-        } catch (MyException ex) {
+            modelo.addRow(columna);
 
         }
     }
@@ -160,10 +174,13 @@ public class ConsultarEmpleado extends javax.swing.JFrame {
         } else {
             try {
                 int idJefeInt = Integer.parseInt(idJefe);
-                miConexion.ConsultarEmpleado(puesto, idJefeInt);
+                ArrayList<Empleado> listaEmpleados = miConexion.consultarEmpleado(puesto, idJefeInt);
+
+                rellenarTabla(listaEmpleados);
+
             } catch (MyException ex) {
-                 JOptionPane.showMessageDialog(this, "El id del jefe tiene que ser válido");
-               
+                JOptionPane.showMessageDialog(this, "El id del jefe tiene que ser válido");
+
             }
         }
     }//GEN-LAST:event_btnConsultarActionPerformed

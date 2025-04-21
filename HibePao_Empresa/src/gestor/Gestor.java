@@ -95,7 +95,7 @@ public class Gestor {
         }
     }
 
-    public ArrayList<Empleado> ConsultarEmpleado(String puesto, int idJefe) throws MyException {
+    public ArrayList<Empleado> consultarEmpleado(String puesto, int idJefe) throws MyException {
         ArrayList<Empleado> listaEmpleados = new ArrayList<>();
 
         try {
@@ -113,7 +113,7 @@ public class Gestor {
                 String tipoContrato = resultado.getString("tipo_contrato");
                 int jefeId = resultado.getInt("jefe_id");
 
-                TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
+                //TipoContrato tipoContatoEnum = TipoContrato.valueOf(tipoContrato);
 
                 Empleado e = new Empleado(id, nombre, apellido, puesto, salario, tipoContrato, jefeId);
 
